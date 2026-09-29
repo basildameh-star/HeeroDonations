@@ -1,1 +1,1231 @@
+<!DOCTYPE html>
 
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Support HEERO</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+    background:
+
+    radial-gradient(
+        circle at top,
+        #003e7a,
+        #00152b 35%,
+        #00040a 70%
+    );
+
+    color: white;
+
+    overflow-x: hidden;
+}
+
+
+/* FIRE GLOW */
+
+.fire {
+
+    position: fixed;
+
+    bottom: -200px;
+
+    left: 50%;
+
+    transform:
+    translateX(-50%);
+
+    width: 700px;
+
+    height: 450px;
+
+    background:
+    radial-gradient(
+        ellipse,
+        #00c8ff,
+        #006eff,
+        transparent 70%
+    );
+
+    filter: blur(70px);
+
+    opacity: .35;
+
+    animation:
+    firemove 2s
+    infinite alternate;
+
+    pointer-events: none;
+}
+
+@keyframes firemove {
+
+    from {
+
+        transform:
+        translateX(-50%)
+        scale(1);
+
+    }
+
+    to {
+
+        transform:
+        translateX(-50%)
+        scale(1.2);
+
+    }
+
+}
+
+
+/* MAIN */
+
+.container {
+
+    width: min(
+        700px,
+        94%
+    );
+
+    margin: auto;
+
+    padding-top: 60px;
+
+    padding-bottom: 60px;
+}
+
+
+/* LOGO */
+
+.logo {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    letter-spacing: 8px;
+
+    color: #53cfff;
+
+    font-weight: bold;
+
+}
+
+
+/* TITLE */
+
+h1 {
+
+    text-align: center;
+
+    font-size: clamp(
+        45px,
+        10vw,
+        85px
+    );
+
+    margin:
+    20px 0
+    10px;
+
+    line-height: .95;
+}
+
+
+.bluefire {
+
+    color: white;
+
+    text-shadow:
+
+    0 0 5px white,
+
+    0 0 15px #5ce6ff,
+
+    0 0 30px #00b7ff,
+
+    0 0 55px #0077ff,
+
+    0 0 90px #004cff;
+
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: #9cb7c9;
+
+    line-height: 1.7;
+
+    margin-bottom: 35px;
+}
+
+
+/* CARD */
+
+.card {
+
+    background:
+    rgba(
+        5,
+        13,
+        25,
+        .92
+    );
+
+    border:
+    1px solid
+    #16446b;
+
+    border-radius:
+    25px;
+
+    padding:
+    25px;
+
+    box-shadow:
+
+    0 0 40px
+    rgba(
+        0,
+        145,
+        255,
+        .15
+    ),
+
+    0 30px 80px
+    rgba(
+        0,
+        0,
+        0,
+        .6
+    );
+
+}
+
+
+/* AMOUNTS */
+
+.amounts {
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(
+        4,
+        1fr
+    );
+
+    gap:
+    10px;
+
+}
+
+
+.amount {
+
+    border:
+    1px solid
+    #1b537e;
+
+    background:
+    #08182a;
+
+    color:
+    white;
+
+    padding:
+    16px;
+
+    border-radius:
+    14px;
+
+    font-size:
+    18px;
+
+    font-weight:
+    bold;
+
+    cursor:
+    pointer;
+
+}
+
+
+.amount:hover {
+
+    background:
+    #073a6c;
+
+}
+
+
+.amount.active {
+
+    border-color:
+    #42cfff;
+
+    background:
+    #074a85;
+
+    box-shadow:
+    0 0 20px
+    #006eff55;
+
+}
+
+
+/* INPUT */
+
+label {
+
+    display:
+    block;
+
+    margin-top:
+    18px;
+
+    margin-bottom:
+    7px;
+
+    color:
+    #91aabc;
+
+    font-size:
+    13px;
+
+}
+
+
+input {
+
+    width:
+    100%;
+
+    background:
+    #020911;
+
+    border:
+    1px solid
+    #17405f;
+
+    color:
+    white;
+
+    padding:
+    15px;
+
+    border-radius:
+    13px;
+
+    outline:
+    none;
+
+    font-size:
+    15px;
+
+}
+
+
+input:focus {
+
+    border-color:
+    #2bbcff;
+
+    box-shadow:
+    0 0 12px
+    #009dff33;
+
+}
+
+
+.row {
+
+    display:
+    grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:
+    10px;
+
+}
+
+
+/* REMEMBER */
+
+.remember {
+
+    margin-top:
+    17px;
+
+    display:
+    flex;
+
+    gap:
+    10px;
+
+    align-items:
+    center;
+
+    color:
+    #90a7b7;
+
+    font-size:
+    13px;
+
+}
+
+
+.remember input {
+
+    width:
+    auto;
+}
+
+
+/* SUMMARY */
+
+.summary {
+
+    margin:
+    22px 0;
+
+    background:
+    #071523;
+
+    border:
+    1px solid
+    #163b59;
+
+    padding:
+    15px;
+
+    border-radius:
+    14px;
+
+    display:
+    flex;
+
+    justify-content:
+    space-between;
+
+}
+
+
+.total {
+
+    color:
+    #59d9ff;
+
+    font-size:
+    22px;
+
+    font-weight:
+    bold;
+}
+
+
+/* SECURITY */
+
+.security {
+
+    margin-top:
+    18px;
+
+    color:
+    #70899a;
+
+    font-size:
+    12px;
+
+    text-align:
+    center;
+
+    line-height:
+    1.6;
+
+}
+
+
+.success {
+
+    display:
+    none;
+
+    margin-top:
+    18px;
+
+    padding:
+    14px;
+
+    background:
+    #063b2b;
+
+    border:
+    1px solid
+    #1ca870;
+
+    border-radius:
+    12px;
+
+    color:
+    #83ffc9;
+
+    text-align:
+    center;
+
+}
+
+
+@media(
+    max-width:600px
+) {
+
+    .amounts {
+
+        grid-template-columns:
+        1fr 1fr;
+
+    }
+
+    .row {
+
+        grid-template-columns:
+        1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="fire"></div>
+
+
+<div class="container">
+
+<div class="logo">
+
+HEERO
+
+</div>
+
+
+<h1>
+
+Fuel The
+
+<br>
+
+<span class="bluefire">
+
+BLUE FIRE
+
+</span>
+
+</h1>
+
+
+<p class="subtitle">
+
+Enjoy my videos?
+
+Support HEERO and help me
+make more videos,
+games and projects.
+
+💙🔥
+
+</p>
+
+
+
+<div class="card">
+
+
+<h3>
+
+🔥 Choose your support
+
+</h3>
+
+
+<div class="amounts">
+
+<button
+class="amount"
+data-value="1">
+
+$1
+
+</button>
+
+
+<button
+class="amount active"
+data-value="5">
+
+$5
+
+</button>
+
+
+<button
+class="amount"
+data-value="10">
+
+$10
+
+</button>
+
+
+<button
+class="amount"
+data-value="20">
+
+$20
+
+</button>
+
+</div>
+
+
+
+<label>
+
+Custom amount
+
+</label>
+
+
+<input
+
+type="number"
+
+id="custom"
+
+placeholder="$5"
+
+min="1"
+
+max="500"
+
+>
+
+
+
+<div class="row">
+
+
+<div>
+
+<label>
+
+Your name
+
+</label>
+
+<input
+
+id="name"
+
+placeholder="Your name"
+
+maxlength="30"
+
+>
+
+</div>
+
+
+<div>
+
+<label>
+
+Message
+
+</label>
+
+<input
+
+id="message"
+
+placeholder="Keep going HEERO!"
+
+maxlength="80"
+
+>
+
+</div>
+
+
+</div>
+
+
+
+<label class="remember">
+
+<input
+type="checkbox"
+id="remember">
+
+Remember my info next time
+
+</label>
+
+
+
+<div class="summary">
+
+<span>
+
+Donation
+
+</span>
+
+<span
+class="total"
+id="total">
+
+$5.00
+
+</span>
+
+</div>
+
+
+
+<div id="paypal-buttons">
+
+Loading payment...
+
+</div>
+
+
+
+<div
+class="success"
+id="success">
+
+🔥💙 THANK YOU FOR SUPPORTING HEERO!
+
+</div>
+
+
+
+<div class="security">
+
+🔒 Secure payment handled by PayPal.
+
+<br>
+
+HEERO never sees or saves
+your card number,
+CVV,
+expiry date
+or PayPal password.
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+let amount = 5;
+
+
+const buttons =
+document.querySelectorAll(
+".amount"
+);
+
+
+const custom =
+document.getElementById(
+"custom"
+);
+
+
+const total =
+document.getElementById(
+"total"
+);
+
+
+const nameInput =
+document.getElementById(
+"name"
+);
+
+
+const messageInput =
+document.getElementById(
+"message"
+);
+
+
+const remember =
+document.getElementById(
+"remember"
+);
+
+
+
+function updateAmount(
+value
+){
+
+amount =
+Number(value);
+
+total.textContent =
+"$" +
+amount.toFixed(2);
+
+}
+
+
+
+buttons.forEach(
+button => {
+
+button.onclick =
+() => {
+
+buttons.forEach(
+b =>
+b.classList.remove(
+"active"
+)
+);
+
+button.classList.add(
+"active"
+);
+
+custom.value = "";
+
+updateAmount(
+button.dataset.value
+);
+
+saveInfo();
+
+};
+
+}
+);
+
+
+
+custom.addEventListener(
+"input",
+() => {
+
+let value =
+Number(
+custom.value
+);
+
+if(
+value >= 1 &&
+value <= 500
+){
+
+buttons.forEach(
+b =>
+b.classList.remove(
+"active"
+)
+);
+
+updateAmount(
+value
+);
+
+saveInfo();
+
+}
+
+}
+);
+
+
+
+function saveInfo(){
+
+if(
+!remember.checked
+){
+return;
+}
+
+localStorage.setItem(
+"heeroDonor",
+JSON.stringify({
+
+name:
+nameInput.value,
+
+message:
+messageInput.value,
+
+amount:
+amount
+
+})
+);
+
+}
+
+
+
+remember.addEventListener(
+"change",
+() => {
+
+if(
+remember.checked
+){
+
+saveInfo();
+
+}
+else{
+
+localStorage.removeItem(
+"heeroDonor"
+);
+
+}
+
+}
+);
+
+
+
+nameInput.addEventListener(
+"input",
+saveInfo
+);
+
+
+messageInput.addEventListener(
+"input",
+saveInfo
+);
+
+
+
+function loadSaved(){
+
+try{
+
+let saved =
+JSON.parse(
+localStorage.getItem(
+"heeroDonor"
+)
+);
+
+if(!saved){
+return;
+}
+
+nameInput.value =
+saved.name || "";
+
+messageInput.value =
+saved.message || "";
+
+if(
+saved.amount
+){
+
+amount =
+Number(
+saved.amount
+);
+
+total.textContent =
+"$" +
+amount.toFixed(2);
+
+custom.value =
+amount;
+
+buttons.forEach(
+b =>
+b.classList.remove(
+"active"
+)
+);
+
+}
+
+remember.checked =
+true;
+
+}
+catch(e){}
+
+}
+
+
+
+loadSaved();
+
+
+
+async function loadPayPal(){
+
+const config =
+await fetch(
+"/api/config"
+);
+
+const data =
+await config.json();
+
+
+const script =
+document.createElement(
+"script"
+);
+
+
+script.src =
+"https://www.paypal.com/sdk/js"
++
+"?client-id="
++
+encodeURIComponent(
+data.clientId
+)
+
++
+"&currency=USD"
+
++
+"&components=buttons"
+
++
+"&enable-funding=card";
+
+
+script.onload =
+startPayPal;
+
+
+document.head.appendChild(
+script
+);
+
+}
+
+
+
+function startPayPal(){
+
+document.getElementById(
+"paypal-buttons"
+).innerHTML = "";
+
+
+paypal.Buttons({
+
+
+style:{
+
+layout:
+"vertical",
+
+shape:
+"rect",
+
+label:
+"paypal"
+
+},
+
+
+
+async createOrder(){
+
+saveInfo();
+
+
+const response =
+await fetch(
+"/api/create-order",
+{
+
+method:
+"POST",
+
+headers:{
+
+"Content-Type":
+"application/json"
+
+},
+
+body:
+JSON.stringify({
+
+amount:
+amount,
+
+name:
+nameInput.value,
+
+message:
+messageInput.value
+
+})
+
+}
+
+);
+
+
+const data =
+await response.json();
+
+
+if(
+!response.ok
+){
+
+throw new Error(
+data.error
+);
+
+}
+
+
+return data.id;
+
+},
+
+
+
+async onApprove(
+data
+){
+
+const response =
+await fetch(
+
+"/api/capture-order/"
++
+data.orderID,
+
+{
+
+method:
+"POST"
+
+}
+
+);
+
+
+const result =
+await response.json();
+
+
+if(
+result.status
+===
+"COMPLETED"
+){
+
+document.getElementById(
+"success"
+).style.display =
+"block";
+
+}
+
+
+},
+
+
+
+onCancel(){
+
+alert(
+"Donation cancelled. Nothing was charged."
+);
+
+},
+
+
+
+onError(error){
+
+console.error(
+error
+);
+
+alert(
+"Payment error. Please try again."
+);
+
+}
+
+
+}).render(
+"#paypal-buttons"
+);
+
+}
+
+
+
+loadPayPal();
+
+</script>
+
+
+</body>
+
+</html>
