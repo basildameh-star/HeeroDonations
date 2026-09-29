@@ -1,166 +1,529 @@
-require("dotenv").config();
+/* ============================================
+   HEERO PAYPAL LINK
 
-const express = require("express");
-const path = require("path");
+   REPLACE THIS ONLY.
 
-const app = express();
+   EXAMPLE:
+   const PAYPAL_LINK =
+   "https://www.paypal.com/ncp/payment/ABC123";
 
-const PORT = process.env.PORT || 3000;
+============================================ */
 
-const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
-const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
+const PAYPAL_LINK =
+  "YOUR_PAYPAL_DONATION_LINK";
 
-const PAYPAL_BASE =
-  process.env.PAYPAL_BASE ||
-  "https://api-m.sandbox.paypal.com";
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+/* ============================================
+   VARIABLES
+============================================ */
 
-async function getAccessToken() {
-  const auth = Buffer.from(
-    `${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`
-  ).toString("base64");
+let selectedAmount = 5;
 
-  const response = await fetch(
-    `${PAYPAL_BASE}/v1/oauth2/token`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${auth}`,
-        "Content-Type":
-          "application/x-www-form-urlencoded"
-      },
-      body: "grant_type=client_credentials"
-    }
+
+const amountButtons =
+  document.querySelectorAll(
+    ".amount-button"
   );
 
-  const data = await response.json();
 
-  if (!response.ok) {
-    console.log(data);
-    throw new Error("PayPal login failed.");
-  }
+const customAmount =
+  document.getElementById(
+    "customAmount"
+  );
 
-  return data.access_token;
+
+const selectedAmountText =
+  document.getElementById(
+    "selectedAmount"
+  );
+
+
+const donorName =
+  document.getElementById(
+    "donorName"
+  );
+
+
+const donorMessage =
+  document.getElementById(
+    "donorMessage"
+  );
+
+
+const rememberInfo =
+  document.getElementById(
+    "rememberInfo"
+  );
+
+
+const donateButton =
+  document.getElementById(
+    "donateButton"
+  );
+
+
+const savedNotice =
+  document.getElementById(
+    "savedNotice"
+  );
+
+
+const amountNotice =
+  document.getElementById(
+    "amountNotice"
+  );
+
+
+/* ============================================
+   FORMAT MONEY
+============================================ */
+
+function formatMoney(
+  amount
+) {
+
+  return (
+    "$" +
+    Number(
+      amount
+    ).toFixed(
+      2
+    )
+  );
+
 }
 
-app.get("/api/config", (req, res) => {
-  res.json({
-    clientId: PAYPAL_CLIENT_ID
-  });
-});
 
-app.post("/api/create-order", async (req, res) => {
-  try {
-    let amount = Number(req.body.amount);
+/* ============================================
+   UPDATE AMOUNT
+============================================ */
 
-    if (!amount || amount < 1 || amount > 500) {
-      return res.status(400).json({
-        error: "Invalid amount"
-      });
-    }
+function setAmount(
+  amount
+) {
 
-    amount = amount.toFixed(2);
+  const number =
+    Number(
+      amount
+    );
 
-    const token = await getAccessToken();
 
-    const response = await fetch(
-      `${PAYPAL_BASE}/v2/checkout/orders`,
-      {
-        method: "POST",
+  if (
+    !Number.isFinite(
+      number
+    )
+  ) {
 
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
+    return;
 
-        body: JSON.stringify({
-          intent: "CAPTURE",
+  }
 
-          purchase_units: [
-            {
-              description: "Support HEERO",
 
-              amount: {
-                currency_code: "USD",
-                value: amount
-              }
-            }
-          ]
-        })
+  if (
+    number < 1
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    number > 500
+  ) {
+
+    return;
+
+  }
+
+
+  selectedAmount =
+    number;
+
+
+  selectedAmountText.textContent =
+    formatMoney(
+      selectedAmount
+    );
+
+
+  saveInformation();
+
+}
+
+
+/* ============================================
+   PRESET BUTTONS
+============================================ */
+
+amountButtons.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        amountButtons.forEach(
+          otherButton => {
+
+            otherButton.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        customAmount.value =
+          "";
+
+
+        setAmount(
+          button.dataset.amount
+        );
+
+
+        amountNotice.textContent =
+          "";
+
       }
     );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.log(data);
-
-      return res.status(500).json({
-        error: "Could not create payment."
-      });
-    }
-
-    res.json({
-      id: data.id
-    });
-
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
-      error: "Server error"
-    });
-  }
-});
-
-app.post(
-  "/api/capture-order/:id",
-  async (req, res) => {
-
-    try {
-
-      const token = await getAccessToken();
-
-      const response = await fetch(
-        `${PAYPAL_BASE}/v2/checkout/orders/${req.params.id}/capture`,
-        {
-          method: "POST",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log(data);
-
-        return res.status(500).json({
-          error: "Payment failed"
-        });
-      }
-
-      res.json(data);
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).json({
-        error: "Server error"
-      });
-
-    }
   }
 );
 
-app.listen(PORT, () => {
-  console.log(
-    `🔥 HEERO site running: http://localhost:${PORT}`
+
+/* ============================================
+   CUSTOM AMOUNT
+============================================ */
+
+customAmount.addEventListener(
+  "input",
+  () => {
+
+    const value =
+      Number(
+        customAmount.value
+      );
+
+
+    if (
+      value >= 1 &&
+      value <= 500
+    ) {
+
+      amountButtons.forEach(
+        button => {
+
+          button.classList.remove(
+            "active"
+          );
+
+        }
+      );
+
+
+      setAmount(
+        value
+      );
+
+    }
+
+  }
+);
+
+
+/* ============================================
+   SAVE BASIC INFO
+============================================ */
+
+function saveInformation() {
+
+  if (
+    !rememberInfo.checked
+  ) {
+
+    return;
+
+  }
+
+
+  const information = {
+
+    name:
+      donorName.value,
+
+    message:
+      donorMessage.value,
+
+    amount:
+      selectedAmount
+
+  };
+
+
+  localStorage.setItem(
+    "heeroDonationInfo",
+    JSON.stringify(
+      information
+    )
   );
-});
+
+
+  savedNotice.style.display =
+    "block";
+
+}
+
+
+/* ============================================
+   REMEMBER CHECKBOX
+============================================ */
+
+rememberInfo.addEventListener(
+  "change",
+  () => {
+
+    if (
+      rememberInfo.checked
+    ) {
+
+      saveInformation();
+
+    }
+
+    else {
+
+      localStorage.removeItem(
+        "heeroDonationInfo"
+      );
+
+
+      savedNotice.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+
+/* ============================================
+   SAVE WHEN TYPING
+============================================ */
+
+donorName.addEventListener(
+  "input",
+  saveInformation
+);
+
+
+donorMessage.addEventListener(
+  "input",
+  saveInformation
+);
+
+
+/* ============================================
+   LOAD SAVED INFO
+============================================ */
+
+function loadSavedInformation() {
+
+  try {
+
+    const saved =
+      JSON.parse(
+
+        localStorage.getItem(
+          "heeroDonationInfo"
+        )
+
+      );
+
+
+    if (
+      !saved
+    ) {
+
+      return;
+
+    }
+
+
+    donorName.value =
+      saved.name || "";
+
+
+    donorMessage.value =
+      saved.message || "";
+
+
+    if (
+      saved.amount >= 1 &&
+      saved.amount <= 500
+    ) {
+
+      selectedAmount =
+        Number(
+          saved.amount
+        );
+
+
+      selectedAmountText.textContent =
+        formatMoney(
+          selectedAmount
+        );
+
+
+      customAmount.value =
+        selectedAmount;
+
+
+      amountButtons.forEach(
+        button => {
+
+          button.classList.remove(
+            "active"
+          );
+
+        }
+      );
+
+    }
+
+
+    rememberInfo.checked =
+      true;
+
+
+    savedNotice.style.display =
+      "block";
+
+  }
+
+  catch (
+    error
+  ) {
+
+    localStorage.removeItem(
+      "heeroDonationInfo"
+    );
+
+  }
+
+}
+
+
+/* ============================================
+   DONATION BUTTON
+============================================ */
+
+donateButton.addEventListener(
+  "click",
+  () => {
+
+    /*
+       Check PayPal link
+    */
+
+    if (
+      PAYPAL_LINK ===
+      "YOUR_PAYPAL_DONATION_LINK"
+    ) {
+
+      alert(
+        "You still need to add your PayPal donation link inside script.js."
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Validate amount
+    */
+
+    if (
+      selectedAmount < 1 ||
+      selectedAmount > 500
+    ) {
+
+      alert(
+        "Please choose an amount between $1 and $500."
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Save safe information
+    */
+
+    saveInformation();
+
+
+    /*
+       Copy amount.
+
+       A normal PayPal payment link does not
+       automatically receive the amount selected
+       on this website.
+
+       So we copy the amount and tell the donor
+       exactly what to enter on PayPal.
+    */
+
+    const money =
+      formatMoney(
+        selectedAmount
+      );
+
+
+    if (
+      navigator.clipboard
+    ) {
+
+      navigator.clipboard
+        .writeText(
+          money
+        )
+        .catch(
+          () => {}
+        );
+
+    }
+
+
+    amountNotice.textContent =
+      money +
+      " selected — enter this amount on PayPal.";
+
+
+    /*
+       Open real PayPal payment page
+    */
+
+    window.open(
+      PAYPAL_LINK,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  }
+);
+
+
+/* ============================================
+   START
+============================================ */
+
+loadSavedInformation();
